@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LawHub MVP - Legal Literacy Platform for India</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        :root {
+            --primary: #1a1a2e;
+            --secondary: #d4af37;
+            --accent: #b19cd9;
+            --text: #ffffff;
+            --bg: #0f0f1e;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            background: linear-gradient(135deg, var(--bg) 0%, var(--primary) 100%);
+            color: var(--text);
+            line-height: 1.6;
+        }
+        
+        header {
+            padding: 2rem 0;
+            border-bottom: 2px solid var(--secondary);
+            background: rgba(0, 0, 0, 0.3);
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 2rem;
+        }
+        
+        .logo {
+            font-size: 1.8rem;
+            font-weight: bold;
+            color: var(--secondary);
+            margin-bottom: 0.5rem;
+        }
+        
+        .tagline {
+            color: var(--accent);
+            font-size: 0.9rem;
+        }
+        
+        section {
+            padding: 4rem 0;
+        }
+        
+        h1 {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            color: var(--secondary);
+        }
+        
+        h2 {
+            font-size: 2rem;
+            margin-bottom: 2rem;
+            color: var(--secondary);
+            text-align: center;
+        }
+        
+        .hero {
+            text-align: center;
+            padding: 6rem 0;
+        }
+        
+        .hero p {
+            font-size: 1.3rem;
+            margin-bottom: 2rem;
+            color: #ddd;
+        }
+        
+        .cta-button {
+            display: inline-block;
+            background: var(--secondary);
+            color: var(--bg);
+            padding: 1rem 2rem;
+            border-radius: 4px;
+            text-decoration: none;
+            font-weight: bold;
+            margin: 0.5rem;
+            transition: all 0.3s ease;
+        }
+        
+        .cta-button:hover {
+            background: var(--accent);
+            color: var(--text);
+            transform: translateY(-2px);
+        }
+        
+        .features {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+            margin: 3rem 0;
+        }
+        
+        .feature-card {
+            background: rgba(255, 255, 255, 0.05);
+            padding: 2rem;
+            border-left: 4px solid var(--secondary);
+            border-radius: 4px;
+            backdrop-filter: blur(10px);
+        }
+        
+        .feature-card h3 {
+            color: var(--secondary);
+            margin-bottom: 1rem;
+        }
+        
+        .tech-stack {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1.5rem;
+            margin: 2rem 0;
+        }
+        
+        .tech-item {
+            background: rgba(212, 175, 55, 0.1);
+            padding: 1.5rem;
+            border-radius: 4px;
+            text-align: center;
+            border: 1px solid var(--secondary);
+        }
+        
+        .tech-item strong {
+            color: var(--secondary);
+        }
+        
+        footer {
+            text-align: center;
+            padding: 2rem 0;
+            border-top: 1px solid var(--secondary);
+            margin-top: 4rem;
+            color: #aaa;
+        }
+        
+        .status {
+            background: rgba(212, 175, 55, 0.2);
+            border: 2px solid var(--secondary);
+            padding: 2rem;
+            border-radius: 4px;
+            text-align: center;
+            margin: 2rem 0;
+        }
+        
+        .status h3 {
+            color: var(--secondary);
+            margin-bottom: 1rem;
+        }
+        
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 2rem;
+            }
+            
+            h2 {
+                font-size: 1.5rem;
+            }
+            
+            .hero p {
+                font-size: 1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="container">
+            <div class="logo">⚖️ LawHub MVP</div>
+            <div class="tagline">Legal Literacy Platform for India</div>
+        </div>
+    </header>
+    
+    <main>
+        <section class="hero">
+            <div class="container">
+                <h1>Solving India's Legal Access Crisis</h1>
+                <p>An AI-powered legal literacy companion for 4+ crore pending cases</p>
+                <p style="font-size: 1rem; color: #999;">Support for 22 Indian languages • AI Legal Assistant • Lawyer Directory</p>
+                <div>
+                    <a href="#features" class="cta-button">Learn More</a>
+                    <a href="https://github.com/sravani905/LawHub-MVP" class="cta-button" style="background: var(--accent);">GitHub Repo</a>
+                </div>
+            </div>
+        </section>
+        
+        <section id="features" style="background: rgba(0, 0, 0, 0.2);">
+            <div class="container">
+                <h2>🎯 Key Features</h2>
+                <div class="features">
+                    <div class="feature-card">
+                        <h3>🌍 22 Indian Languages</h3>
+                        <p>Hindi, Bengali, Tamil, Telugu, Gujarati, Marathi, Kannada, Malayalam, Odia, Punjabi, and more</p>
+                    </div>
+                    <div class="feature-card">
+                        <h3>🤖 Smart Legal Assistant</h3>
+                        <p>AI guidance that explains concepts without providing legal advice. Always shows uncertainty.</p>
+                    </div>
+                    <div class="feature-card">
+                        <h3>👨‍⚖️ Lawyer Directory</h3>
+                        <p>Connect with verified legal professionals in your area</p>
+                    </div>
+                    <div class="feature-card">
+                        <h3>📚 Case Explorer</h3>
+                        <p>Learn from real-world legal examples and scenarios</p>
+                    </div>
+                    <div class="feature-card">
+                        <h3>📖 Law Section Explainer</h3>
+                        <p>Simple breakdowns of Indian Legal Code sections</p>
+                    </div>
+                    <div class="feature-card">
+                        <h3>💾 Save Cases</h3>
+                        <p>Store and track your legal inquiries locally</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+        
+        <section>
+            <div class="container">
+                <h2>⚙️ Tech Stack</h2>
+                <div class="tech-stack">
+                    <div class="tech-item">
+                        <strong>Frontend</strong><br>React 18, TypeScript, Tailwind CSS, Framer Motion
+                    </div>
+                    <div class="tech-item">
+                        <strong>Backend</strong><br>Node.js, Express.js, MongoDB
+                    </div>
+                    <div class="tech-item">
+                        <strong>Build Tools</strong><br>Vite, Webpack, PostCSS
+                    </div>
+                    <div class="tech-item">
+                        <strong>Deployment</strong><br>Vercel, GitHub Pages, Docker
+                    </div>
+                </div>
+            </div>
+        </section>
+        
+        <section>
+            <div class="container">
+                <div class="status">
+                    <h3>🚀 Deployment Status</h3>
+                    <p>MVP is live and ready for use</p>
+                    <p style="font-size: 0.9rem; color: #aaa; margin-top: 1rem;">Repository: github.com/sravani905/LawHub-MVP</p>
+                </div>
+            </div>
+        </section>
+    </main>
+    
+    <footer>
+        <div class="container">
+            <p>&copy; 2026 LawHub MVP. Made with ❤️ for India's legal accessibility.</p>
+            <p>Built as a hackathon project • For educational purposes</p>
+        </div>
+    </footer>
+</body>
+</html>
