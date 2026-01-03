@@ -1,2 +1,253 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>LawHub MVP - Legal Literacy Platform</title><script src="https://cdn.jsdelivr.net/npm/react@18/umd/react.production.min.js"></script><script src="https://cdn.jsdelivr.net/npm/react-dom@18/umd/react-dom.production.min.js"></script><script src="https://cdn.jsdelivr.net/npm/@babel/standalone/babel.min.js"></script><style>*{margin:0;padding:0;box-sizing:border-box}:root{--primary:#1a1a2e;--secondary:#d4af37;--accent:#b19cd9;--text:#ffffff;--bg:#0f0f1e}body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Oxygen,Ubuntu,Cantarell,sans-serif;background:linear-gradient(135deg,var(--bg) 0%,var(--primary) 100%);color:var(--text);line-height:1.6;min-height:100vh}#root{width:100%;min-height:100vh}.container{max-width:1200px;margin:0 auto;padding:0 2rem}header{padding:2rem 0;border-bottom:2px solid var(--secondary);background:rgba(0,0,0,0.3)}.logo{font-size:1.8rem;font-weight:bold;color:var(--secondary);margin-bottom:0.5rem}.tagline{color:var(--accent);font-size:0.9rem}section{padding:3rem 0}h1{font-size:2.5rem;margin-bottom:1rem;color:var(--secondary)}h2{font-size:2rem;margin-bottom:2rem;color:var(--secondary);text-align:center}h3{color:var(--secondary);margin:1rem 0 0.5rem 0}.btn{display:inline-block;background:var(--secondary);color:var(--bg);padding:0.8rem 1.5rem;border:none;border-radius:4px;cursor:pointer;font-weight:bold;margin:0.5rem;transition:all 0.3s;font-size:1rem}.btn:hover{background:var(--accent);color:var(--text);transform:translateY(-2px)}.btn-secondary{background:var(--accent)}.btn-secondary:hover{background:var(--secondary)}.select-wrapper{margin:2rem 0}.select-wrapper select{padding:0.8rem 1rem;border:2px solid var(--secondary);background:rgba(0,0,0,0.5);color:var(--text);border-radius:4px;font-size:1rem;cursor:pointer;width:100%;max-width:300px}.input-group{display:flex;gap:1rem;margin:2rem 0;flex-wrap:wrap}.input-group input{flex:1;min-width:250px;padding:0.8rem 1rem;border:2px solid var(--secondary);background:rgba(0,0,0,0.5);color:var(--text);border-radius:4px;font-size:1rem}.card{background:rgba(255,255,255,0.05);padding:2rem;border-left:4px solid var(--secondary);border-radius:4px;backdrop-filter:blur(10px);margin:1.5rem 0}.card-title{color:var(--secondary);font-size:1.3rem;margin-bottom:1rem;font-weight:bold}.response-section{background:rgba(212,175,55,0.1);border-left:4px solid var(--secondary);padding:1.5rem;margin:1rem 0;border-radius:4px}.response-label{color:var(--secondary);font-weight:bold;font-size:0.9rem;text-transform:uppercase;margin-bottom:0.5rem}.response-content{color:var(--text);line-height:1.8}.saved-cases{margin-top:3rem}.case-item{background:rgba(255,255,255,0.08);padding:1.5rem;border:1px solid var(--secondary);border-radius:4px;margin:1rem 0}.case-item h4{color:var(--secondary);margin-bottom:0.5rem}.case-item p{color:#ccc;font-size:0.95rem;margin:0.5rem 0}.delete-btn{background:#d32f2f;padding:0.4rem 0.8rem;font-size:0.85rem}.status-badge{display:inline-block;background:var(--accent);color:var(--bg);padding:0.3rem 0.8rem;border-radius:3px;font-size:0.85rem;font-weight:bold;margin:0.5rem 0}</style></head><body><div id="root"></div><script type="text/babel">const LANGUAGES={'hi':'Hindi','en':'English','ta':'Tamil','te':'Telugu','gu':'Gujarati','mr':'Marathi','ka':'Kannada','ml':'Malayalam','od':'Odia','pa':'Punjabi','bn':'Bengali','as':'Assamese','bo':'Bodo','do':'Dogri','ko':'Konkani','mai':'Maithili','man':'Manipuri','ne':'Nepali','sa':'Sanskrit','san':'Santali','si':'Sindhi','ur':'Urdu'};const LEGAL_TOPICS={rent_notice:{title:'Rent Notice',description:'Understanding and responding to rent-related notices'},eviction:{title:'Eviction',description:'Laws related to property eviction'},inheritance:{title:'Inheritance',description:'Understanding inheritance laws and succession'},contract:{title:'Contracts',description:'Basic contract laws and agreements'},labor:{title:'Labor Rights',description:'Employee and labor rights'}};function AIResponse({question,topic,language}){const responses=[{acknowledgment:'I understand you\'re asking about '+topic+' in '+language+'.',context:'In India, the relevant laws include the Indian Contract Act, state-specific laws, and recent judicial precedents. This area covers many nuances that vary by jurisdiction and specific circumstances.',knownVsDependsItems:['Facts of your case matter significantly','State-specific variations apply','Recent judgments may affect outcomes','Your documentation is crucial'],options:['Consult with a local lawyer','Review relevant bare acts','Document everything','Seek legal aid if unable to afford counsel'],professionalReminder:'This is educational guidance only. Always consult with a qualified lawyer before taking legal action. We guide thinking, not decisions.'}];return responses[0];}function SavedCases({cases,onDelete}){return(<div className="saved-cases"><h3>📋 Saved Cases</h3>{cases.length===0?(<p style={{color:'#aaa',marginTop:'1rem'}}>No saved cases yet</p>):cases.map((c,i)=>(<div key={i} className="case-item"><h4>{c.topic}</h4><p><strong>Language:</strong> {LANGUAGES[c.language]}</p><p><strong>Question:</strong> {c.question}</p><p><strong>Saved:</strong> {new Date(c.timestamp).toLocaleDateString()}</p><button className="btn delete-btn" onClick={()=>onDelete(i)}>Delete</button></div>))}</div>);}function App(){const[step,setStep]=React.useState(0);const[selectedLanguage,setSelectedLanguage]=React.useState('en');const[selectedTopic,setSelectedTopic]=React.useState('rent_notice');const[question,setQuestion]=React.useState('');const[response,setResponse]=React.useState(null);const[savedCases,setSavedCases]=React.useState(()=>{const saved=localStorage.getItem('lawHubCases');return saved?JSON.parse(saved):[];});const handleNext=()=>{if(step<3)setStep(step+1);};const handleSubmit=()=>{if(question.trim()){const aiResponse=AIResponse({question,topic:LEGAL_TOPICS[selectedTopic].title,language:LANGUAGES[selectedLanguage]});setResponse(aiResponse);setStep(4);}};const handleSaveCase=()=>{const newCase={topic:LEGAL_TOPICS[selectedTopic].title,question,language:selectedLanguage,timestamp:new Date().toISOString()};const updated=[...savedCases,newCase];setSavedCases(updated);localStorage.setItem('lawHubCases',JSON.stringify(updated));alert('Case saved successfully!');};const handleDeleteCase=(index)=>{const updated=savedCases.filter((_,i)=>i!==index);setSavedCases(updated);localStorage.setItem('lawHubCases',JSON.stringify(updated));};const handleReset=()=>{setStep(0);setQuestion('');setResponse(null);};return(<><header><div className="container"><div className="logo">⚖️ LawHub MVP</div><div className="tagline">Legal Literacy Platform for India</div></div></header><main><section><div className="container">{step===0&&(<div><h1>🌍 Select Your Language</h1><div className="select-wrapper"><select value={selectedLanguage} onChange={(e)=>setSelectedLanguage(e.target.value)}>{Object.entries(LANGUAGES).map(([code,name])=>(<option key={code} value={code}>{name}</option>))}</select></div><p style={{margin:'2rem 0',color:'#bbb'}}>You selected: <strong>{LANGUAGES[selectedLanguage]}</strong></p><button className="btn" onClick={handleNext}>Next</button></div>)}{step===1&&(<div><h1>📚 Select Legal Topic</h1><div style={{margin:'2rem 0'}}>{Object.entries(LEGAL_TOPICS).map(([key,topic])=>(<div key={key} className="card" onClick={()=>setSelectedTopic(key)} style={{cursor:'pointer',border:selectedTopic===key?'2px solid var(--accent)':'1px solid var(--secondary)',transition:'all 0.3s'}}><h3>{topic.title}</h3><p>{topic.description}</p></div>))}</div><button className="btn" onClick={()=>setStep(0)}>Back</button> <button className="btn" onClick={handleNext}>Next</button></div>)}{step===2&&(<div><h1>❓ Describe Your Situation</h1><p style={{margin:'1rem 0',color:'#bbb'}}>Topic: <strong>{LEGAL_TOPICS[selectedTopic].title}</strong></p><div className="input-group"><input type="text" placeholder="Describe your legal question or situation..." value={question} onChange={(e)=>setQuestion(e.target.value)} style={{flex:1}}/></div><p style={{fontSize:'0.9rem',color:'#999',margin:'1rem 0'}}>Be as specific as possible. Include relevant dates, amounts, and parties involved.</p><button className="btn" onClick={()=>setStep(1)}>Back</button> <button className="btn" onClick={handleNext}>Review</button></div>)}{step===3&&(<div><h1>✅ Review Before Submitting</h1><div className="card"><p><strong>Language:</strong> {LANGUAGES[selectedLanguage]}</p><p><strong>Topic:</strong> {LEGAL_TOPICS[selectedTopic].title}</p><p><strong>Your Question:</strong></p><p style={{color:'#ddd',marginTop:'0.5rem'}}>{question}</p></div><button className="btn" onClick={()=>setStep(2)}>Back</button> <button className="btn" onClick={handleSubmit}>Get AI Guidance</button></div>)}{step===4&&response&&(<div><h1>💡 AI Legal Guidance</h1><div className="card"><span className="status-badge">ACKNOWLEDGMENT</span><div className="response-section"><div className="response-content">{response.acknowledgment}</div></div><span className="status-badge">CONTEXT</span><div className="response-section"><div className="response-content">{response.context}</div></div><span className="status-badge">KNOWN vs DEPENDS</span><div className="response-section">{response.knownVsDependsItems.map((item,i)=>(<div key={i} style={{marginBottom:'0.5rem'}}>• {item}</div>))}</div><span className="status-badge">OPTIONS</span><div className="response-section">{response.options.map((opt,i)=>(<div key={i} style={{marginBottom:'0.5rem'}}>• {opt}</div>))}</div><span className="status-badge">PROFESSIONAL REMINDER</span><div className="response-section"><div className="response-content"><strong>{response.professionalReminder}</strong></div></div></div><button className="btn" onClick={handleSaveCase}>💾 Save This Case</button> <button className="btn btn-secondary" onClick={handleReset}>← Start New Query</button></div>)}</div></section><SavedCases cases={savedCases} onDelete={handleDeleteCase}/></main></>
-);}ReactDOM.createRoot(document.getElementById('root')).render(<App/>);</script></body></html>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>LawHub MVP - Legal Literacy Platform</title>
+  <script src="https://cdn.jsdelivr.net/npm/react@18/umd/react.production.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/react-dom@18/umd/react-dom.production.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@babel/standalone/babel.min.js"></script>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    :root {
+      --primary: #1a1a2e;
+      --secondary: #d4af37;
+      --accent: #b19cd9;
+      --text: #ffffff;
+      --bg: #0f0f1e
+    }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+      background: linear-gradient(135deg, var(--bg) 0%, var(--primary) 100%);
+      color: var(--text);
+      line-height: 1.6;
+      min-height: 100vh;
+    }
+    #root { width: 100%; min-height: 100vh; }
+    .container { max-width: 1200px; margin: 0 auto; padding: 0 2rem; }
+    header {
+      padding: 2rem 0;
+      border-bottom: 2px solid var(--secondary);
+      background: rgba(0, 0, 0, 0.3);
+    }
+    .logo { font-size: 1.8rem; font-weight: bold; color: var(--secondary); margin-bottom: 0.5rem; }
+    .tagline { color: var(--accent); font-size: 0.9rem; }
+    section { padding: 3rem 0; }
+    h1 { font-size: 2.5rem; margin-bottom: 1rem; color: var(--secondary); }
+    h2 { font-size: 2rem; margin-bottom: 2rem; color: var(--secondary); text-align: center; }
+    h3 { color: var(--secondary); margin: 1rem 0 0.5rem 0; }
+    .btn {
+      display: inline-block;
+      background: var(--secondary);
+      color: var(--bg);
+      padding: 0.8rem 1.5rem;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      font-weight: bold;
+      margin: 0.5rem;
+      transition: all 0.3s;
+      font-size: 1rem;
+    }
+    .btn:hover {
+      background: var(--accent);
+      color: var(--text);
+      transform: translateY(-2px);
+    }
+    .btn-secondary { background: var(--accent); }
+    .btn-secondary:hover { background: var(--secondary); }
+    .select-wrapper { margin: 2rem 0; }
+    .select-wrapper select {
+      padding: 0.8rem 1rem;
+      border: 2px solid var(--secondary);
+      background: rgba(0, 0, 0, 0.5);
+      color: var(--text);
+      border-radius: 4px;
+      font-size: 1rem;
+      cursor: pointer;
+      width: 100%;
+      max-width: 300px;
+    }
+    .input-group {
+      display: flex;
+      gap: 1rem;
+      margin: 2rem 0;
+      flex-wrap: wrap;
+    }
+    .input-group input {
+      flex: 1;
+      min-width: 250px;
+      padding: 0.8rem 1rem;
+      border: 2px solid var(--secondary);
+      background: rgba(0, 0, 0, 0.5);
+      color: var(--text);
+      border-radius: 4px;
+      font-size: 1rem;
+      cursor: pointer;
+      width: 100%;
+      max-width: 100%;
+    }
+  </style>
+</head>
+<body>
+  <div id="root"></div>
+  <script type="text/babel">
+    const { useState } = React;
+
+    // Translation data
+    const translations = {
+      en: {
+        logo: '⚖️ LawHub MVP',
+        tagline: 'Legal Literacy Platform for India',
+        selectLanguage: 'Select Your Language',
+        youSelected: 'You selected:',
+        next: 'Next',
+        savedCases: 'Saved Cases',
+        language: 'Language',
+        question: 'Question',
+        saved: 'Saved',
+        delete: 'Delete',
+        rentNotice: 'Rent Notice'
+      },
+      hi: {
+        logo: '⚖️ LawHub MVP',
+        tagline: 'भारत के लिए कानूनी साक्षरता मंच',
+        selectLanguage: 'अपनी भाषा चुनें',
+        youSelected: 'आपने चुना:',
+        next: 'अगला',
+        savedCases: 'सहेजे गए मामले',
+        language: 'भाषा',
+        question: 'प्रश्न',
+        saved: 'सहेजा गया',
+        delete: 'हटाएं',
+        rentNotice: 'किराया नोटिस'
+      },
+      ta: {
+        logo: '⚖️ LawHub MVP',
+        tagline: 'இந்தியாவுக்கான சட்ட சாक்ষரதை தளம்',
+        selectLanguage: 'உங்கள் மொழியைத் தேர்ந்தெடுக்கவும்',
+        youSelected: 'நீங்கள் தேர்ந்தெடுத்தது:',
+        next: 'அடுத்து',
+        savedCases: 'சேமிக்கப்பட்ட வழக்குகள்',
+        language: 'மொழி',
+        question: 'கேள்வி',
+        saved: 'சேமிக்கப்பட்ட',
+        delete: 'நீக்கு',
+        rentNotice: 'வாடை நோட்டீஸ்'
+      },
+      te: {
+        logo: '⚖️ LawHub MVP',
+        tagline: 'భారతదేశానికి చట్ట సాక్షరత ప్లాట్‌ఫార్మ్',
+        selectLanguage: 'మీ భాషను ఎంచుకోండి',
+        youSelected: 'మీరు ఎంచుకున్నవి:',
+        next: 'తర్వాత',
+        savedCases: 'సేవ్ చేసిన కేసులు',
+        language: 'భాష',
+        question: 'ప్రశ్న',
+        saved: 'సేవ్ చేయబడింది',
+        delete: 'తొలగించు',
+        rentNotice: 'అద్దె నోటిసు'
+      },
+      bn: {
+        logo: '⚖️ LawHub MVP',
+        tagline: 'ভারতের জন্য আইনি সাক্ষরতা প্ল্যাটফর্ম',
+        selectLanguage: 'আপনার ভাষা নির্বাচন করুন',
+        youSelected: 'আপনি নির্বাচন করেছেন:',
+        next: 'পরবর্তী',
+        savedCases: 'সংরক্ষিত মামলাগুলি',
+        language: 'ভাষা',
+        question: 'প্রশ্ন',
+        saved: 'সংরক্ষিত',
+        delete: 'মুছুন',
+        rentNotice: 'ভাড়া নোটিশ'
+      },
+      gu: {
+        logo: '⚖️ LawHub MVP',
+        tagline: 'ભારત માટે કાયદાકીય સાક્ષરતા પ્લેટફોર્મ',
+        selectLanguage: 'તમારી ભાષા પસંદ કરો',
+        youSelected: 'તમે પસંદ કર્યું છે:',
+        next: 'આગલું',
+        savedCases: 'સાચવેલા કેસો',
+        language: 'ભાષા',
+        question: 'પ્રશ્ન',
+        saved: 'સાચવેલું',
+        delete: 'આપવું',
+        rentNotice: 'ભાડું નોટિસ'
+      }
+    };
+
+    function App() {
+      const [language, setLanguage] = useState('en');
+      const t = translations[language] || translations.en;
+      const languageNames = {
+        en: 'English',
+        hi: 'Hindi',
+        ta: 'Tamil',
+        te: 'Telugu',
+        bn: 'Bengali',
+        gu: 'Gujarati',
+        mr: 'Marathi',
+        kn: 'Kannada',
+        ml: 'Malayalam',
+        or: 'Odia',
+        pa: 'Punjabi',
+        as: 'Assamese',
+        br: 'Bodo',
+        do: 'Dogri',
+        ko: 'Konkani',
+        ma: 'Maithili',
+        mn: 'Manipuri',
+        ne: 'Nepali',
+        sa: 'Sanskrit',
+        st: 'Santali',
+        sd: 'Sindhi',
+        ur: 'Urdu'
+      };
+
+      return (
+        <div>
+          <header>
+            <div className="container">
+              <div className="logo">{t.logo}</div>
+              <div className="tagline">{t.tagline}</div>
+            </div>
+          </header>
+          <main>
+            <section>
+              <div className="container">
+                <h2>🌍 {t.selectLanguage}</h2>
+                <div className="select-wrapper">
+                  <select 
+                    value={language} 
+                    onChange={(e) => setLanguage(e.target.value)}
+                  >
+                    {Object.entries(languageNames).map(([code, name]) => (
+                      <option key={code} value={code}>{name}</option>
+                    ))}
+                  </select>
+                </div>
+                <p>{t.youSelected} <strong>{languageNames[language]}</strong></p>
+                <button className="btn">{t.next}</button>
+              </div>
+            </section>
+            <section>
+              <div className="container">
+                <h2>📋 {t.savedCases}</h2>
+                <div style={{border: '2px solid var(--secondary)', borderRadius: '8px', padding: '1.5rem', marginBottom: '2rem'}}>
+                  <h3>{t.rentNotice}</h3>
+                  <p><strong>{t.language}:</strong> {languageNames[language]}</p>
+                  <p><strong>{t.question}:</strong> My landlord gave me a 30-day notice to vacate without proper reason. What are my rights?</p>
+                  <p><strong>{t.saved}:</strong> 1/3/2026</p>
+                  <button className="btn btn-secondary">{t.delete}</button>
+                </div>
+              </div>
+            </section>
+          </main>
+        </div>
+      );
+    }
+
+    ReactDOM.createRoot(document.getElementById('root')).render(<App />);
+  </script>
+</body>
+</html>
