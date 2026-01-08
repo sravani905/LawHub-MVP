@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<title>LawHub – Legal Thinking Assistant</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<script src="https://cdn.tailwindcss.com"></script>
+
+<style>
+body {
+  background:#1a1a1a;
+  color:#f5f5f5;
+  font-family: system-ui, sans-serif;
+}
+.card {
+  background:#111;
+  border:1px solid #333;
+  border-radius:12px;
+  padding:20px;
+}
+.btn {
+  padding:12px 20px;
+  border-radius:8px;
+  font-weight:600;
+}
+.btn-primary {
+  background:#d4af37;
+  color:#000;
+}
+.btn-secondary {
+  border:2px solid #d4af37;
+  color:#d4af37;
+}
+</style>
+</head>
+
+<body>
+<div id="root"></div>
+
+<script>
+/* ===================== STATE ===================== */
+const appState = {
+  currentPage: "home",
+  searchQuery: "",
+  aiResponse: null
+};
+
+const listeners = [];
+function subscribe(fn){ listeners.push(fn); }
+function notify(){ listeners.forEach(fn=>fn()); }
+function setState(obj){ Object.assign(appState,obj); notify(); }
+
+/* ===================== NAV ===================== */
+function navigateTo(page){
+  setState({ currentPage: page });
+}
+
+/* ===================== AI SERVICE (SINGLE SOURCE) ===================== */
+const aiService = {
+  async generateResponse(text){
+    await new Promise(r=>setTimeout(r,800));
+    return {
+      acknowledgment: "I understand this situation can feel stressful.",
+      context: "Under Indian law, notices require a proper response within a specific timeline.",
+      knownVsDepends: "We know a notice was received. Validity depends on notice period, grounds, and agreement.",
+      options: "You may respond in writing, consult a lawyer, or gather evidence.",
+      professionalReminder: "This is not legal advice."
+    };
+  }
+};
+
+/* ===================== PAGES ===================== */
+function Header(){
+  return `
+  <header class="p-4 border-b border-gray-700 flex justify-between">
+    <div class="font-bold text-xl">⚖️ LawHub</div>
+    <nav class="space-x-4">
+      <button onclick="navigateTo('home')">Home</button>
+      <button onclick="navigateTo('search')">Search</button>
+      <button onclick="navigateTo('ai')">AI Guidance</button>
+    </nav>
+  </header>`;
+}
+
+function HomePage(){
+  return `
+  <div class="p-8 text-center">
+    <h1 class="text-4xl font-bold mb-4 text-yellow-400">Legal Thinking, Simplified</h1>
+    <p class="text-gray-400 mb-6">Understand law. Decide calmly.</p>
+    <button class="btn btn-primary" onclick="navigateTo('search')">Start</button>
+  </div>`;
+}
+
+function SearchPage(){
+  return `
+  <div class="p-8">
+    <h2 class="text-2xl mb-4">Describe your situation</h2>
+    <textarea id="query" class="w-full p-3 bg-black border border-gray-600 rounded mb-4"></textarea>
+    <button class="btn btn-primary" onclick="submitQuery()">Get Guidance</button>
+  </div>`;
+}
+
+async function submitQuery(){
+  navigateTo("ai");
+  const text = document.getElementById("query").value;
+  const res = await aiService.generateResponse(text);
+  setState({ aiResponse: res });
+}
+
+function AIPage(){
+  if(!appState.aiResponse){
+    return `<div class="p-8">Analyzing your situation…</div>`;
+  }
+  const r = appState.aiResponse;
+  return `
+  <div class="p-8 space-y-4">
+    <div class="card"><b>Acknowledgment</b><p>${r.acknowledgment}</p></div>
+    <div class="card"><b>Context</b><p>${r.context}</p></div>
+    <div class="card"><b>Known vs Depends</b><p>${r.knownVsDepends}</p></div>
+    <div class="card"><b>Options</b><p>${r.options}</p></div>
+    <div class="card border-yellow-500"><b>Reminder</b><p>${r.professionalReminder}</p></div>
+  </div>`;
+}
+
+/* ===================== APP ===================== */
+function App(){
+  let page="";
+  if(appState.currentPage==="home") page=HomePage();
+  if(appState.currentPage==="search") page=SearchPage();
+  if(appState.currentPage==="ai") page=AIPage();
+  return Header()+page;
+}
+
+/* ===================== RENDER ===================== */
+function render(){
+  document.getElementById("root").innerHTML = App();
+}
+subscribe(render);
+render();
+</script>
+</body>
+</html>
